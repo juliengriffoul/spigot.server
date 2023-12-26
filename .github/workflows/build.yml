@@ -20,14 +20,11 @@ jobs:
       run: |
         REPOSITORY="juliengriffoul/spigot.build"
         WORKFLOW="build.yml"
-        RUN_ID=`gh run --repo ${REPOSITORY} list --workflow ${WORKFLOW} --json databaseId --jq .[0].databaseId`
-        gh run --repo ${REPOSITORY} download ${RUN_ID} -n spigot
+        # RUN_ID=`gh run --repo ${REPOSITORY} list --workflow ${WORKFLOW} --json databaseId --jq .[0].databaseId`
+        gh run --repo ${REPOSITORY} download ${{ github.event.inputs.run_id }} -n spigot
         ls -lR
 
-    - name: Unzip artifact
-      run: |
-        unzip artifacts.zip
-        mv spigot-*.jar spigot.jar
-
     - name: Build image
-      run: docker build . --file Dockerfile --tag spigot-server:latest
+      run: |
+        mv spigot-*.jar spigot.jar
+        docker build . --file Dockerfile --tag spigot-server:latest
