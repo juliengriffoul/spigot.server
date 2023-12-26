@@ -17,7 +17,7 @@ jobs:
     - name: Download artifacts
       run: |
         OTHER_REPO="juliengriffoul/spigot.build"
-        WF_NAME="build.yml"
+        WF_NAME="Build Spigot artifacts from last BuildTools.jar"
         ARTIFACT_NAME="spigot"
         RUN_ID=`gh run --repo ${OTHER_REPO} list --workflow ${WF_NAME} --json databaseId --jq .[0].databaseId`
         gh run --repo ${OTHER_REPO} download ${RUN_ID} -n ${ARTIFACT_NAME}
