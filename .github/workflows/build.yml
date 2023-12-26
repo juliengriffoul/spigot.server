@@ -15,12 +15,16 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Download artifacts
-      id: download-artifact
-      uses: dawidd6/action-download-artifact@v3
-      with:
-        github_token: ${{secrets.GITHUB_TOKEN}}
-        name: spigot
-        run_id: ${{ github.event.inputs.run_id }}
+      run: |
+        OTHER_REPO="juliengriffoul/spigot.build"
+        WF_NAME="build.yml"
+        ARTIFACT_NAME="spigot"
+        RUN_ID=`gh run --repo ${OTHER_REPO} list --workflow ${WF_NAME} --json databaseId --jq .[0].databaseId`
+        gh run --repo ${OTHER_REPO} download ${RUN_ID} -n ${ARTIFACT_NAME}
+        # List the artifiact directory/files
+        ls -lR
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Unzip artifacts
       run: |
