@@ -1,9 +1,11 @@
 name: Build Spigot server image
 
 on:
-  push:
-    branches: [ "main" ]
   workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Spigot build workflow run ID'
+        required: true
 
 jobs:
   build:
@@ -11,5 +13,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build the Docker image
+
+    - name: Download artifacts
+      id: download-artifact
+      uses: dawidd6/action-download-artifact@v3
+      with:
+        github_token: ${{secrets.GITHUB_TOKEN}}
+        run_id: ${{ github.event.inputs.run_id }}
+
+    - name: Unzip artifacts
+      run: |
+        unzip artifacts.zip
+        mv spigot-*.jar spigot.jar
+
+    - name: Build image
       run: docker build . --file Dockerfile --tag spigot-server:latest
