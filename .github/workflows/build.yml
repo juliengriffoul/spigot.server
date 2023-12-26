@@ -16,6 +16,7 @@ jobs:
 
     - name: Download artifacts
       run: |
+        gh workflow list
         OTHER_REPO="juliengriffoul/spigot.build"
         WF_NAME="build.yml"
         ARTIFACT_NAME="spigot"
